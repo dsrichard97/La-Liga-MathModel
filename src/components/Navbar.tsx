@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sliders, ArrowRightLeft, Shield, Sparkles, Trophy } from 'lucide-react';
+import { Sliders, ArrowRightLeft, Shield, Sparkles, Trophy, ExternalLink, Package } from 'lucide-react';
 import { MathSoccerAtom } from './MathSoccerAtom';
 
 interface NavbarProps {
@@ -9,6 +9,7 @@ interface NavbarProps {
   onToggleSpotify: () => void;
   isSpotifyOpen: boolean;
   selectedCompareCount: number;
+  onOpenExportPackage: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -18,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleSpotify,
   isSpotifyOpen,
   selectedCompareCount,
+  onOpenExportPackage,
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#080B11]/90 backdrop-blur-md">
@@ -103,15 +105,38 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Action Buttons: Radar Compare & Spotify Matchday Music */}
-        <div className="flex items-center gap-2.5">
+        {/* Action Buttons: Export Package, Live Link, Radar Compare & Spotify */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Direct Clickable Live GitHub Pages Link */}
+          <a
+            href="https://dsrichard97.github.io/La-Liga-MathModel/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-mono font-bold transition-all shadow-sm"
+            title="Open live GitHub Pages package"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="truncate max-w-[140px]">Live Site</span>
+            <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+          </a>
+
+          {/* Export Package Modal Trigger Button */}
+          <button
+            onClick={onOpenExportPackage}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-cyan-500/20 hover:from-amber-500/30 hover:to-cyan-500/30 text-amber-300 border border-amber-500/50 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm"
+            title="Export Model & Package"
+          >
+            <Package className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Export Package</span>
+          </button>
+
           {/* Compare Trigger Button */}
           <button
             onClick={onOpenCompare}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm"
           >
             <ArrowRightLeft className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Compare</span> Radar
+            <span className="hidden sm:inline">Compare</span>
             {selectedCompareCount > 0 && (
               <span className="w-4 h-4 rounded-full bg-cyan-400 text-black text-[10px] font-black flex items-center justify-center">
                 {selectedCompareCount}

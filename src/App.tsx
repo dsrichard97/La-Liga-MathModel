@@ -10,6 +10,7 @@ import { TeamChemistryDepthChart } from './components/TeamChemistryDepthChart';
 import { LaLigaModelBuilder } from './components/LaLigaModelBuilder';
 import { PlayerCompareModal } from './components/PlayerCompareModal';
 import { LeagueStandings } from './components/LeagueStandings';
+import { ExportPackageModal } from './components/ExportPackageModal';
 import {
   Trophy,
   Zap,
@@ -17,6 +18,10 @@ import {
   Sliders,
   Shield,
   Sparkles,
+  Package,
+  ExternalLink,
+  Github,
+  Globe,
 } from 'lucide-react';
 
 export default function App() {
@@ -38,6 +43,9 @@ export default function App() {
 
   // Spotify Drawer State
   const [isSpotifyOpen, setIsSpotifyOpen] = useState<boolean>(false);
+
+  // Export Package Modal State
+  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
 
   // Toggle player selection for compare
   const handleTogglePlayerCompareSelection = (playerId: string) => {
@@ -81,6 +89,7 @@ export default function App() {
         onToggleSpotify={() => setIsSpotifyOpen(!isSpotifyOpen)}
         isSpotifyOpen={isSpotifyOpen}
         selectedCompareCount={selectedPlayerIdsForCompare.length}
+        onOpenExportPackage={() => setIsExportModalOpen(true)}
       />
 
       {/* Expandable Spotify Matchday Music Drawer */}
@@ -100,9 +109,23 @@ export default function App() {
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="max-w-2xl space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-400 text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Liga MX Apertura & Clausura · Mathematical Soccer Studio</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-400 text-xs font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Liga MX Apertura & Clausura · Mathematical Soccer Studio</span>
+                </div>
+
+                <a
+                  href="https://dsrichard97.github.io/La-Liga-MathModel/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 text-xs font-mono font-bold transition-all shadow-sm"
+                  title="Visit the live GitHub Pages deployed website"
+                >
+                  <Globe className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                  <span>Live: dsrichard97.github.io/La-Liga-MathModel</span>
+                  <ExternalLink className="w-3 h-3 text-emerald-400" />
+                </a>
               </div>
 
               <h1 className="font-display font-black text-3xl sm:text-5xl text-white tracking-tight leading-tight">
@@ -126,6 +149,14 @@ export default function App() {
                 >
                   <ArrowRightLeft className="w-4 h-4 fill-black text-black" />
                   Compare Henry Martín vs Gignac (D3 Radar)
+                </button>
+
+                <button
+                  onClick={() => setIsExportModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm"
+                >
+                  <Package className="w-4 h-4 text-amber-400" />
+                  Export Package & Repo
                 </button>
 
                 <button
@@ -223,6 +254,7 @@ export default function App() {
               weights={laLigaWeights}
               onUpdateWeights={setLaLigaWeights}
               onSelectPlayerForCompare={handleSelectPlayerForCompare}
+              onOpenExportPackage={() => setIsExportModalOpen(true)}
             />
           </section>
         )}
@@ -269,17 +301,68 @@ export default function App() {
         onSelectPlayer2={setPlayer2}
       />
 
-      {/* Footer */}
-      <footer className="relative z-10 mt-12 border-t border-white/10 bg-[#06080D] py-6 text-xs font-mono text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <MathSoccerAtom size="sm" animate={false} />
-            <span className="text-slate-400 font-bold">Liga MX Analytics & FIFA Chemistry Hub</span>
-            <span>· Powered by D3.js, Spotify, and Mathematical Tactical Modeling</span>
+      {/* Export Package & GitHub Deployment Modal */}
+      <ExportPackageModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        weights={laLigaWeights}
+      />
+
+      {/* Footer with Clickable Live Deployment and GitHub Repo Links */}
+      <footer className="relative z-10 mt-12 border-t border-white/10 bg-[#06080D] py-8 text-xs font-mono text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <MathSoccerAtom size="sm" animate={false} />
+              <span className="text-slate-300 font-bold">Liga MX Analytics & FIFA Chemistry Hub</span>
+              <span className="text-slate-500 hidden sm:inline">· Powered by D3.js, Spotify, and Mathematical Tactical Modeling</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="https://dsrichard97.github.io/La-Liga-MathModel/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 hover:text-white border border-cyan-800/60 transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Live Site: dsrichard97.github.io/La-Liga-MathModel</span>
+                <ExternalLink className="w-3 h-3 text-cyan-400" />
+              </a>
+
+              <a
+                href="https://github.com/dsrichard97/La-Liga-MathModel"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-colors"
+              >
+                <Github className="w-3.5 h-3.5 text-white" />
+                <span>GitHub Repo</span>
+                <ExternalLink className="w-3 h-3 text-slate-400" />
+              </a>
+
+              <button
+                onClick={() => setIsExportModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors cursor-pointer"
+              >
+                <Package className="w-3.5 h-3.5 text-amber-400" />
+                <span>Export Package</span>
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>Apertura / Clausura 2024-2025</span>
-            <span>All-Star Synergy Weighted</span>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-3 border-t border-white/5 text-[11px] text-slate-500">
+            <div>
+              <span>Liga MX Apertura / Clausura 2024-2025 · Custom "La Liga" Algorithmic Weighting</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-emerald-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                GitHub Pages Ready
+              </span>
+              <span>·</span>
+              <span>MIT License</span>
+            </div>
           </div>
         </div>
       </footer>

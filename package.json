@@ -1,7 +1,12 @@
 {
-  "name": "react-example",
+  "name": "la-liga-mathmodel",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "https://dsrichard97.github.io/La-Liga-MathModel/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dsrichard97/La-Liga-MathModel"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",

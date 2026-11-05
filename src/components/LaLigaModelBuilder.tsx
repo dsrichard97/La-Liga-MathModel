@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MLSTeam, MLSPlayer, LaLigaModelWeights, SimulationResult } from '../types/soccer';
 import { LA_LIGA_PRESETS } from '../data/ligaMxData';
 import { simulateLaLigaMatch } from '../utils/modelCalculations';
-import { Sliders, Play, Sparkles, BookOpen, Calculator, RotateCcw, Save, ShieldAlert, Trophy } from 'lucide-react';
+import { Sliders, Play, Sparkles, BookOpen, Calculator, RotateCcw, Save, ShieldAlert, Trophy, Package, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface LaLigaModelBuilderProps {
@@ -11,6 +11,7 @@ interface LaLigaModelBuilderProps {
   weights: LaLigaModelWeights;
   onUpdateWeights: (weights: LaLigaModelWeights) => void;
   onSelectPlayerForCompare: (player: MLSPlayer) => void;
+  onOpenExportPackage?: () => void;
 }
 
 export const LaLigaModelBuilder: React.FC<LaLigaModelBuilderProps> = ({
@@ -19,6 +20,7 @@ export const LaLigaModelBuilder: React.FC<LaLigaModelBuilderProps> = ({
   weights,
   onUpdateWeights,
   onSelectPlayerForCompare,
+  onOpenExportPackage,
 }) => {
   const [homeTeamId, setHomeTeamId] = useState<string>(teams[0]?.id || 'club-america');
   const [awayTeamId, setAwayTeamId] = useState<string>(teams[5]?.id || teams[1]?.id || 'chivas');
@@ -112,6 +114,27 @@ export const LaLigaModelBuilder: React.FC<LaLigaModelBuilderProps> = ({
             <Save className="w-3.5 h-3.5" />
             Save Model
           </button>
+
+          {onOpenExportPackage && (
+            <button
+              onClick={onOpenExportPackage}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 font-bold text-xs border border-cyan-500/40 transition-colors cursor-pointer"
+            >
+              <Package className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Export Package</span>
+            </button>
+          )}
+
+          <a
+            href="https://dsrichard97.github.io/La-Liga-MathModel/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono transition-colors"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>GitHub Pages</span>
+            <ExternalLink className="w-3 h-3 text-cyan-400" />
+          </a>
         </div>
       </div>
 
