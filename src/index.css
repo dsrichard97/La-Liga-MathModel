@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-display {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .font-tech {
+    font-family: 'Rajdhani', monospace, sans-serif;
+  }
+  .font-code {
+    font-family: 'Space Grotesk', monospace, sans-serif;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee-left:hover {
+  animation-play-state: paused;
+}
+
+/* Glassmorphism and futuristic FIFA glow styling */
+.glass-panel {
+  background: rgba(14, 20, 32, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fifa-gold-gradient {
+  background: linear-gradient(135deg, #FFDF00 0%, #D4AF37 40%, #AA771C 75%, #F4D03F 100%);
+}
+
+.fifa-card-shadow {
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.8), 0 0 24px -6px rgba(212, 175, 55, 0.25);
+}
+
+.fifa-allstar-shadow {
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.9), 0 0 30px -4px rgba(0, 229, 255, 0.35);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080B11;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

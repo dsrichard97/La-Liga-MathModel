@@ -1,0 +1,6 @@
+{
+  "name": "MLS Analytics & FIFA Chemistry Hub",
+  "description": "Advanced MLS soccer analytics with multi-model filtering, custom La Liga algorithmic model builder, D3.js player radar comparison, and team chemistry depth charts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
