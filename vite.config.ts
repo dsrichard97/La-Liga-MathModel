@@ -32,80 +32,30 @@ function lyriaMusicPlugin(): Plugin {
               res.setHeader('Content-Type', 'application/json');
               res.end(JSON.stringify({
                 success: false,
-                error: 'GEMINI_API_KEY is not configured or is a placeholder in Secrets.',
-                needsApiKey: true,
+                error: 'GEMINI_API_KEY is missing or invalid in server environment.',
               }));
               return;
             }
 
-            const { GoogleGenAI } = await import('@google/genai');
-            const ai = new GoogleGenAI({
-              apiKey: apiKey,
-              httpOptions: {
-                headers: {
-                  'User-Agent': 'aistudio-build',
-                },
-              },
-            });
-
-            const selectedModel = model === 'lyria-3-pro-preview' ? 'lyria-3-pro-preview' : 'lyria-3-clip-preview';
-            const trackPrompt = prompt || 'Generate a high-energy FIFA EA Sports FC style stadium anthem with infectious drum beats, synth brass, and modern bass.';
-
-            const response = await ai.models.generateContentStream({
-              model: selectedModel,
-              contents: trackPrompt,
-            });
-
-            const audioChunks: Buffer[] = [];
-            let lyrics = '';
-            let mimeType = 'audio/mpeg';
-
-            for await (const chunk of response) {
-              const parts = chunk.candidates?.[0]?.content?.parts;
-              if (!parts) continue;
-              for (const part of parts) {
-                if (part.inlineData?.data) {
-                  if (audioChunks.length === 0 && part.inlineData.mimeType) {
-                    mimeType = part.inlineData.mimeType;
-                  }
-                  audioChunks.push(Buffer.from(part.inlineData.data, 'base64'));
-                }
-                if (part.text) {
-                  lyrics += part.text;
-                }
+            const response = await fetch(
+              `https://generativelanguage.googleapis.com/v1beta/models/${model || 'gemini-2.5-flash'}:generateContent?key=${apiKey}`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: prompt }] }],
+                }),
               }
-            }
+            );
 
-            if (audioChunks.length === 0) {
-              res.statusCode = 500;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({
-                success: false,
-                error: 'No audio data received from Lyria model.',
-              }));
-              return;
-            }
-
-            const audioBase64 = Buffer.concat(audioChunks).toString('base64');
-            const audioDataUrl = `data:${mimeType};base64,${audioBase64}`;
-
-            res.statusCode = 200;
+            const data = await response.json();
+            res.statusCode = response.status;
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({
-              success: true,
-              audioDataUrl,
-              lyrics,
-              model: selectedModel,
-              prompt: trackPrompt,
-            }));
-          } catch (err: unknown) {
-            const error = err as Error;
+            res.end(JSON.stringify(data));
+          } catch (error: any) {
             res.statusCode = 500;
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({
-              success: false,
-              error: error.message || 'Error generating music with Lyria',
-            }));
+            res.end(JSON.stringify({ success: false, error: error.message }));
           }
         });
       });
@@ -132,13 +82,15 @@ function gitPushPlugin(): Plugin {
 
         req.on('end', async () => {
           try {
-            const { token } = JSON.parse(body || '{}');
-            if (!token || typeof token !== 'string' || !token.trim()) {
+            const { githubToken } = JSON.parse(body || '{}');
+            const token = githubToken || process.env.GITHUB_TOKEN;
+
+            if (!token) {
               res.statusCode = 400;
               res.setHeader('Content-Type', 'application/json');
               res.end(JSON.stringify({
                 success: false,
-                error: 'GitHub Personal Access Token is required to push to github.com/dsrichard97/La-Liga-MathModel.',
+                error: 'GitHub Token is required to push changes.',
               }));
               return;
             }
@@ -184,7 +136,7 @@ function gitPushPlugin(): Plugin {
 
 export default defineConfig(() => {
   return {
-    base: './',
+    base: '/La-Liga-MathModel/',
     plugins: [react(), tailwindcss(), lyriaMusicPlugin(), gitPushPlugin()],
     resolve: {
       alias: {
@@ -200,4 +152,3 @@ export default defineConfig(() => {
     },
   };
 });
-
