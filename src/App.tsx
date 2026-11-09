@@ -112,9 +112,9 @@ export function App() {
 
         {activeSection === 'all' && (
           <div className="space-y-8">
-            <LeagueStandings teams={LIGA_MX_TEAMS} />
+            <LeagueStandings teams={LIGA_MX_TEAMS} players={LIGA_MX_PLAYERS} />
             <ProScoutingPitchIQ teams={LIGA_MX_TEAMS} players={LIGA_MX_PLAYERS} />
-            <LaLigaModelBuilder
+            <LaLigaModelBuilder players={LIGA_MX_PLAYERS}
               teams={LIGA_MX_TEAMS}
               weights={modelWeights}
               onWeightsChange={setModelWeights}
@@ -131,11 +131,11 @@ export function App() {
         )}
 
         {activeSection === 'standings' && (
-          <LeagueStandings teams={LIGA_MX_TEAMS} />
+          <LeagueStandings teams={LIGA_MX_TEAMS} players={LIGA_MX_PLAYERS} />
         )}
 
         {activeSection === 'laliga' && (
-          <LaLigaModelBuilder
+          <LaLigaModelBuilder players={LIGA_MX_PLAYERS}
             teams={LIGA_MX_TEAMS}
             weights={modelWeights}
             onWeightsChange={setModelWeights}
