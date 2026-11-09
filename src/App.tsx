@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LIGA_MX_TEAMS, LIGA_MX_PLAYERS, DEFAULT_LA_LIGA_WEIGHTS } from './data/ligaMxData';
+import { LIGA_MX_TEAMS } from './data/ligaMxData'; 
+ import { MLS_PLAYERS as LIGA_MX_PLAYERS, DEFAULT_LA_LIGA_WEIGHTS } from './data/mlsData'; 
 import { MLSPlayer, MLSTeam, ModelMethod, LaLigaModelWeights } from './types/soccer';
 import { Navbar } from './components/Navbar';
 import { MathSoccerAtom } from './components/MathSoccerAtom';
